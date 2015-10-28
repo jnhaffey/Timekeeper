@@ -284,7 +284,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
                                 TimeRecord current = null;
                                 foreach (var rev in revs)
                                 {
-                                    if (rev.State == Settings.Default.StateNameConfiguration.GetActiveState(Global.ProjectName))
+                                    if (rev.State == Settings.Default.StateNameConfiguration.GetActiveState(wi.Project.Name))
                                     {
                                         current = new TimeRecord() { Item = rev.Item, StartTime = rev.Timestamp, StartRevision = rev.Revision };
                                     }

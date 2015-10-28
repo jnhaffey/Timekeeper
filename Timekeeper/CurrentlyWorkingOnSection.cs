@@ -1,8 +1,11 @@
 using Company.Timekeeper.Properties;
+using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.Controls;
+using Microsoft.TeamFoundation.VersionControl.Client;
 using Microsoft.TeamFoundation.VersionControl.Controls.Extensibility;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.TeamFoundation;
 using Microsoft.VisualStudio.TeamFoundation.VersionControl;
 using System;
 using System.Collections.ObjectModel;
@@ -67,12 +70,14 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
         {
             if (_pendingChangesExt == null)
             {
+                var dte = Package.GetGlobalService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+                TeamFoundationServerExt ext = dte.GetObject("Microsoft.VisualStudio.TeamFoundation.TeamFoundationServerExt") as TeamFoundationServerExt;
                 _pendingChangesExt = GetService<IPendingChangesExt>();
                 if (_pendingChangesExt == null)
                 {
-                    var dte = Package.GetGlobalService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
-                    VersionControlExt ext = dte.GetObject("Microsoft.VisualStudio.TeamFoundation.VersionControl.VersionControlExt") as VersionControlExt;
-                    _pendingChangesExt = ext.PendingChanges;
+                    //var dte = Package.GetGlobalService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
+                    VersionControlExt ex = dte.GetObject("Microsoft.VisualStudio.TeamFoundation.VersionControl.VersionControlExt") as VersionControlExt;
+                    _pendingChangesExt = ex.PendingChanges;
                 }
                 if (_pendingChangesExt != null)
                 {
@@ -103,55 +108,4 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
         }
     }
 
-    public class StateToBrushConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType,
-            object parameter, CultureInfo culture)
-        {
-            if (value is string)
-            {
-                if ((value as string) == Settings.Default.StateNameConfiguration.GetActiveState(Global.ProjectName))
-                {
-                    return new SolidColorBrush(Colors.DarkGreen);
-                }
-                else
-                {
-                    return new SolidColorBrush(Colors.DarkRed);
-                }
-            }
-            return null;
-        }
-
-        public object ConvertBack(object value, Type targetType,
-            object parameter, CultureInfo culture)
-        {
-            return null;
-        }
-    }
-
-    public class StateToDescriptionConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType,
-            object parameter, CultureInfo culture)
-        {
-            if (value is string)
-            {
-                if ((value as string) == Settings.Default.StateNameConfiguration.GetActiveState(Global.ProjectName))
-                {
-                    return "Currently Working";
-                }
-                else
-                {
-                    return Settings.Default.StateNameConfiguration.GetPausedState(Global.ProjectName);
-                }
-            }
-            return null;
-        }
-
-        public object ConvertBack(object value, Type targetType,
-            object parameter, CultureInfo culture)
-        {
-            return null;
-        }
-    }
 }

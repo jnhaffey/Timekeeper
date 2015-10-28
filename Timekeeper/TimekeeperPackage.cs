@@ -17,6 +17,7 @@ using Microsoft.TeamFoundation.VersionControl.Client;
 using System.Collections.Generic;
 using Company.Timekeeper.Properties;
 using Microsoft.ALMRangers.Samples.MyHistory;
+using System.ComponentModel.Composition;
 
 namespace Company.Timekeeper
 {
@@ -38,10 +39,8 @@ namespace Company.Timekeeper
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
     [Guid(GuidList.guidTimekeeperPkgString)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
-    public sealed class TimekeeperPackage : Package, IVsSolutionEvents
+    public sealed class TimekeeperPackage : Package
     {
-        private uint _cookie;
-
         /// <summary>
         /// Default constructor of the package.
         /// Inside this method you can place any initialization code that does not require 
@@ -70,30 +69,26 @@ namespace Company.Timekeeper
 
             var dte = Package.GetGlobalService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
             TeamFoundationServerExt ext = dte.GetObject("Microsoft.VisualStudio.TeamFoundation.TeamFoundationServerExt") as TeamFoundationServerExt;
-            var slnSvc = GetService(typeof(SVsSolution)) as IVsSolution;
-            uint cookie;
-            slnSvc.AdviseSolutionEvents(this, out cookie);
-            _cookie = cookie;
             ext.ProjectContextChanged += ext_ProjectContextChanged;
-            ext_ProjectContextChanged(null, null);
         }
-
-        private string _projectName = string.Empty;
 
         void ext_ProjectContextChanged(object sender, EventArgs e)
         {
             var dte = Package.GetGlobalService(typeof(EnvDTE.DTE)) as EnvDTE.DTE;
             TeamFoundationServerExt ext = dte.GetObject("Microsoft.VisualStudio.TeamFoundation.TeamFoundationServerExt") as TeamFoundationServerExt;
-            var vsExt = dte.GetObject("Microsoft.VisualStudio.TeamFoundation.VersionControl.VersionControlExt") as VersionControlExt;
-            VersionControlServer vcs = vsExt.SolutionWorkspace == null ? null : vsExt.SolutionWorkspace.VersionControlServer;
-            Global.ProjectName = ext.ActiveProjectContext == null ? null : ext.ActiveProjectContext.ProjectName;
-
-            if (vcs != null)
+            
+            if (ext != null && ext.ActiveProjectContext != null && ext.ActiveProjectContext.DomainUri != null)
             {
-                vcs.UnshelveShelveset -= vcs_UnshelveShelveset;
-                vcs.CommitShelveset -= vcs_CommitShelveset;
-                vcs.UnshelveShelveset += vcs_UnshelveShelveset;
-                vcs.CommitShelveset += vcs_CommitShelveset;
+                var coll = TfsTeamProjectCollectionFactory.GetTeamProjectCollection(new Uri(ext.ActiveProjectContext.DomainUri));
+                var vcs = coll.GetService<VersionControlServer>();
+                
+                if (vcs != null)
+                {
+                    vcs.UnshelveShelveset -= vcs_UnshelveShelveset;
+                    vcs.CommitShelveset -= vcs_CommitShelveset;
+                    vcs.UnshelveShelveset += vcs_UnshelveShelveset;
+                    vcs.CommitShelveset += vcs_CommitShelveset;
+                }
             }
         }
 
@@ -101,14 +96,16 @@ namespace Company.Timekeeper
         {
             var shelf = e.Shelveset;
 
+            //TODO configurable
             if (e.Shelveset.Properties.Any(x => x.PropertyName == "Microsoft.TeamFoundation.VersionControl.Shelveset.CreatedBy" && (string)x.Value == "Suspend"))
             {
                 foreach (var item in shelf.WorkItemInfo)
                 {
-                    if (item.WorkItem.State == Settings.Default.StateNameConfiguration.GetActiveState(_projectName))
+                    if (item.WorkItem.State == Settings.Default.StateNameConfiguration.GetActiveState(item.WorkItem.Project.Name))
                     {
                         item.WorkItem.PartialOpen();
-                        item.WorkItem.State = Settings.Default.StateNameConfiguration.GetPausedState(_projectName);
+                        item.WorkItem.State = Settings.Default.StateNameConfiguration.GetPausedState(item.WorkItem.Project.Name);
+                        //TODO configurable
                         item.WorkItem.Reason = "My Work Suspended";
                         item.WorkItem.Save();
                     }
@@ -121,67 +118,16 @@ namespace Company.Timekeeper
             var shelf = e.Shelveset;
             foreach (var item in shelf.WorkItemInfo)
             {
-                if (item.WorkItem.State != Settings.Default.StateNameConfiguration.GetActiveState(_projectName))
+                if (item.WorkItem.State != Settings.Default.StateNameConfiguration.GetActiveState(item.WorkItem.Project.Name))
                 {
                     item.WorkItem.PartialOpen();
-                    item.WorkItem.State = Settings.Default.StateNameConfiguration.GetActiveState(_projectName);
+                    item.WorkItem.State = Settings.Default.StateNameConfiguration.GetActiveState(item.WorkItem.Project.Name);
+                    //TODO configurable
                     item.WorkItem.Reason = "My Work Resumed";
                     item.WorkItem.Save();
                 }
             }
         }
         #endregion
-
-
-        public int OnAfterCloseSolution(object pUnkReserved)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnAfterLoadProject(IVsHierarchy pStubHierarchy, IVsHierarchy pRealHierarchy)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnAfterOpenProject(IVsHierarchy pHierarchy, int fAdded)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnAfterOpenSolution(object pUnkReserved, int fNewSolution)
-        {
-            ext_ProjectContextChanged(null, null);
-            return VSConstants.S_OK;
-        }
-
-        public int OnBeforeCloseProject(IVsHierarchy pHierarchy, int fRemoved)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnBeforeCloseSolution(object pUnkReserved)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnBeforeUnloadProject(IVsHierarchy pRealHierarchy, IVsHierarchy pStubHierarchy)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnQueryCloseProject(IVsHierarchy pHierarchy, int fRemoving, ref int pfCancel)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnQueryCloseSolution(object pUnkReserved, ref int pfCancel)
-        {
-            return VSConstants.S_OK;
-        }
-
-        public int OnQueryUnloadProject(IVsHierarchy pRealHierarchy, ref int pfCancel)
-        {
-            return VSConstants.S_OK;
-        }
     }
 }

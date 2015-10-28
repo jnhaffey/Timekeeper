@@ -32,9 +32,9 @@
                                     <TextBlock>
                                     <Run Text="{Binding Path=Id, Mode=OneWay}" />
                                     <Run Text=" - " />
-                                    <Run Text="{Binding Path=Title, Mode=OneWay}" Foreground="{Binding Path=State, Converter={StaticResource brushConverter}, Mode=OneWay}" />
+                                    <Run Text="{Binding Path=Title, Mode=OneWay}" Foreground="{Binding Converter={StaticResource brushConverter}, Mode=OneWay}" />
                                     </TextBlock>
-                                    <TextBlock Foreground="{Binding Path=State, Converter={StaticResource brushConverter}, Mode=OneWay}" Text="{Binding Path=State, Converter={StaticResource descConverter}, Mode=OneWay}"/>
+                                    <TextBlock Foreground="{Binding Converter={StaticResource brushConverter}, Mode=OneWay}" Text="{Binding Converter={StaticResource descConverter}, Mode=OneWay}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>

@@ -51,16 +51,16 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
 
         private void workItemList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (ParentSection.WorkItems[SelectedIndex].State == Settings.Default.StateNameConfiguration.GetActiveState(Global.ProjectName))
+            if (ParentSection.WorkItems[SelectedIndex].State == Settings.Default.StateNameConfiguration.GetActiveState(ParentSection.WorkItems[SelectedIndex].Project.Name))
             {
                 ParentSection.WorkItems[SelectedIndex].PartialOpen();
-                ParentSection.WorkItems[SelectedIndex].State = Settings.Default.StateNameConfiguration.GetPausedState(Global.ProjectName);
+                ParentSection.WorkItems[SelectedIndex].State = Settings.Default.StateNameConfiguration.GetPausedState(ParentSection.WorkItems[SelectedIndex].Project.Name);
                 ParentSection.WorkItems[SelectedIndex].Save();
             }
             else
             {
                 ParentSection.WorkItems[SelectedIndex].PartialOpen();
-                ParentSection.WorkItems[SelectedIndex].State = Settings.Default.StateNameConfiguration.GetActiveState(Global.ProjectName);
+                ParentSection.WorkItems[SelectedIndex].State = Settings.Default.StateNameConfiguration.GetActiveState(ParentSection.WorkItems[SelectedIndex].Project.Name);
                 ParentSection.WorkItems[SelectedIndex].Save();
             }
             ParentSection.Refresh();
