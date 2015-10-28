@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="Microsoft.ALMRangers.Samples.MyHistory.CurrentlyWorkingOnSectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:l="clr-namespace:Microsoft.ALMRangers.Samples.MyHistory"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xc="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+             xmlns:vsshell="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.11.0"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+                                     DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <UserControl.Resources>
+        <l:StateToDescriptionConverter x:Key="descConverter" />
+        <l:StateToBrushConverter x:Key="brushConverter" />
+    </UserControl.Resources>
+    <Grid Margin="6,6,6,6">
+        <!-- Changesets list view -->
+        <ListView x:Name="workItemList" ItemsSource="{Binding Path=ParentSection.WorkItems}" BorderThickness="0"
+                  SelectionMode="Extended" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderBrush="Black" MouseDoubleClick="workItemList_MouseDoubleClick">
+            <ListView.View>
+                <GridView>
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style>
+                            <Setter Property="FrameworkElement.Visibility" Value="Collapsed"/>
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
+                    <GridViewColumn>
+                        <GridViewColumnHeader Content="Title"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock>
+                                    <Run Text="{Binding Path=Id, Mode=OneWay}" />
+                                    <Run Text=" - " />
+                                    <Run Text="{Binding Path=Title, Mode=OneWay}" Foreground="{Binding Path=State, Converter={StaticResource brushConverter}, Mode=OneWay}" />
+                                    </TextBlock>
+                                    <TextBlock Foreground="{Binding Path=State, Converter={StaticResource brushConverter}, Mode=OneWay}" Text="{Binding Path=State, Converter={StaticResource descConverter}, Mode=OneWay}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <!--<GridViewColumn>
+                        <GridViewColumnHeader Content="Times"/>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical">
+                                    <xc:DateTimePicker Value="{Binding Path=StartTime, Mode=TwoWay}" />
+                                    <xc:DateTimePicker Value="{Binding Path=EndTime, Mode=TwoWay}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>-->
+                </GridView>
+            </ListView.View>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <!--<Setter Property="Foreground" Value="{DynamicResource {x:Static vsshell:VsBrushes.ToolWindowTextKey}}"/>-->
+                    <Setter Property="BorderBrush" Value="Black" />
+                    <Setter Property="BorderThickness" Value="0" />
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+    </Grid>
+</UserControl>
