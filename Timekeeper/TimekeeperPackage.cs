@@ -101,10 +101,10 @@ namespace Company.Timekeeper
             {
                 foreach (var item in shelf.WorkItemInfo)
                 {
-                    if (item.WorkItem.State == Settings.Default.StateNameConfiguration.GetActiveState(item.WorkItem.Project.Name))
+                    if (item.WorkItem.State == Properties.Settings.Default.StateNameConfiguration.GetActiveState(item.WorkItem.Project.Name))
                     {
                         item.WorkItem.PartialOpen();
-                        item.WorkItem.State = Settings.Default.StateNameConfiguration.GetPausedState(item.WorkItem.Project.Name);
+                        item.WorkItem.State = Properties.Settings.Default.StateNameConfiguration.GetPausedState(item.WorkItem.Project.Name);
                         //TODO configurable
                         item.WorkItem.Reason = "My Work Suspended";
                         item.WorkItem.Save();
@@ -118,10 +118,10 @@ namespace Company.Timekeeper
             var shelf = e.Shelveset;
             foreach (var item in shelf.WorkItemInfo)
             {
-                if (item.WorkItem.State != Settings.Default.StateNameConfiguration.GetActiveState(item.WorkItem.Project.Name))
+                if (item.WorkItem.State != Properties.Settings.Default.StateNameConfiguration.GetActiveState(item.WorkItem.Project.Name))
                 {
                     item.WorkItem.PartialOpen();
-                    item.WorkItem.State = Settings.Default.StateNameConfiguration.GetActiveState(item.WorkItem.Project.Name);
+                    item.WorkItem.State = Properties.Settings.Default.StateNameConfiguration.GetActiveState(item.WorkItem.Project.Name);
                     //TODO configurable
                     item.WorkItem.Reason = "My Work Resumed";
                     item.WorkItem.Save();

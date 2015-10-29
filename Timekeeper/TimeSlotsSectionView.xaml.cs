@@ -11,6 +11,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows.Controls;
+    using Company.Timekeeper;
 
     /// <summary>
     /// WorkItemsSectionView
@@ -174,6 +175,12 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
                     ParentSection.Refresh();
                 }
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var _settings = new Settings();
+            _settings.ShowDialog();
         }
     }
 }

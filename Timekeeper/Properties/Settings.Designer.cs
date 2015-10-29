@@ -25,35 +25,39 @@ namespace Company.Timekeeper.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
-<ProjectStateNamesCollection xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <DefaultActiveState>Active</DefaultActiveState>
-  <DefaultPausedState>New</DefaultPausedState>
-  <Projects>
-    <ProjectStateNames>
-      <ProjectName>Consol</ProjectName>
-      <ActiveState>Active</ActiveState>
-      <PausedState>Paused</PausedState>
-    </ProjectStateNames>
-    <ProjectStateNames>
-      <ProjectName>Dan M Test Thing</ProjectName>
-      <ActiveState>Active</ActiveState>
-      <PausedState>Paused</PausedState>
-    </ProjectStateNames>
-  </Projects>
-</ProjectStateNamesCollection>")]
-        public global::Timekeeper.SettingsTypes.ProjectStateNamesCollection StateNameConfiguration {
-            get {
-                return ((global::Timekeeper.SettingsTypes.ProjectStateNamesCollection)(this["StateNameConfiguration"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Setting {
             get {
                 return ((string)(this["Setting"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"
+                    <ProjectStateNamesCollection xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+                        <DefaultActiveState>Active</DefaultActiveState>
+                        <DefaultPausedState>New</DefaultPausedState>
+                        <Projects>
+                            <ProjectStateNames>
+                                <ProjectName>Consol</ProjectName>
+                                <ActiveState>Active</ActiveState>
+                                <PausedState>Paused</PausedState>
+                            </ProjectStateNames>
+                            <ProjectStateNames>
+                                <ProjectName>Dan M Test Thing</ProjectName>
+                                <ActiveState>Active</ActiveState>
+                                <PausedState>Paused</PausedState>
+                            </ProjectStateNames>
+                        </Projects>
+                    </ProjectStateNamesCollection>
+                ")]
+        public global::Timekeeper.SettingsTypes.ProjectStateNamesCollection StateNameConfiguration {
+            get {
+                return ((global::Timekeeper.SettingsTypes.ProjectStateNamesCollection)(this["StateNameConfiguration"]));
+            }
+            set {
+                this["StateNameConfiguration"] = value;
             }
         }
     }

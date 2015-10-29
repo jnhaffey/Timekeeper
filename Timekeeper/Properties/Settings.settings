@@ -2,27 +2,28 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Company.Timekeeper.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="StateNameConfiguration" Type="Timekeeper.SettingsTypes.ProjectStateNamesCollection" Scope="Application">
-      <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
-&lt;ProjectStateNamesCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;DefaultActiveState&gt;Active&lt;/DefaultActiveState&gt;
-  &lt;DefaultPausedState&gt;New&lt;/DefaultPausedState&gt;
-  &lt;Projects&gt;
-    &lt;ProjectStateNames&gt;
-      &lt;ProjectName&gt;Consol&lt;/ProjectName&gt;
-      &lt;ActiveState&gt;Active&lt;/ActiveState&gt;
-      &lt;PausedState&gt;Paused&lt;/PausedState&gt;
-    &lt;/ProjectStateNames&gt;
-    &lt;ProjectStateNames&gt;
-      &lt;ProjectName&gt;Dan M Test Thing&lt;/ProjectName&gt;
-      &lt;ActiveState&gt;Active&lt;/ActiveState&gt;
-      &lt;PausedState&gt;Paused&lt;/PausedState&gt;
-    &lt;/ProjectStateNames&gt;
-  &lt;/Projects&gt;
-&lt;/ProjectStateNamesCollection&gt;</Value>
-    </Setting>
     <Setting Name="Setting" Type="System.String" Scope="Application">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="StateNameConfiguration" Type="Timekeeper.SettingsTypes.ProjectStateNamesCollection" Scope="User">
+      <Value Profile="(Default)">
+                    &lt;ProjectStateNamesCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+                        &lt;DefaultActiveState&gt;Active&lt;/DefaultActiveState&gt;
+                        &lt;DefaultPausedState&gt;New&lt;/DefaultPausedState&gt;
+                        &lt;Projects&gt;
+                            &lt;ProjectStateNames&gt;
+                                &lt;ProjectName&gt;Consol&lt;/ProjectName&gt;
+                                &lt;ActiveState&gt;Active&lt;/ActiveState&gt;
+                                &lt;PausedState&gt;Paused&lt;/PausedState&gt;
+                            &lt;/ProjectStateNames&gt;
+                            &lt;ProjectStateNames&gt;
+                                &lt;ProjectName&gt;Dan M Test Thing&lt;/ProjectName&gt;
+                                &lt;ActiveState&gt;Active&lt;/ActiveState&gt;
+                                &lt;PausedState&gt;Paused&lt;/PausedState&gt;
+                            &lt;/ProjectStateNames&gt;
+                        &lt;/Projects&gt;
+                    &lt;/ProjectStateNamesCollection&gt;
+                </Value>
     </Setting>
   </Settings>
 </SettingsFile>

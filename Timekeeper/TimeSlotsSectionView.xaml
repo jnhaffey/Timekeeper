@@ -24,7 +24,7 @@
                         <CheckBox Name="ExportedCheck" Margin="0,6,5,0" Checked="ExportedCheck_Checked" Unchecked="ExportedCheck_Unchecked" />
                     </StackPanel>
                 </Border>
-                <Border Background="LightGoldenrodYellow" BorderBrush="LightGray" BorderThickness="1" Margin="3" Padding="3">
+                <Border Background="LightGoldenrodYellow" BorderBrush="LightGray" BorderThickness="1" Margin="3" Padding="5">
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Period: " />
                         <ComboBox Name="PeriodCombo" SelectionChanged="PeriodCombo_SelectionChanged">
@@ -40,8 +40,10 @@
                         </ComboBox>
                     </StackPanel>
                 </Border>
+                <Border Background="LightGoldenrodYellow" BorderBrush="LightGray" BorderThickness="1" Margin="3" Padding="5">
+                    <Button Content="Settings" Click="Button_Click" />
+                </Border>
 
-                
             </WrapPanel>
             <StackPanel Orientation="Horizontal">
                 
