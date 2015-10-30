@@ -14,9 +14,9 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Label Name="ViewTimeline" Content="View Timeline" HorizontalAlignment="Right" Foreground="Blue" MouseLeftButtonUp="ViewTimeline_MouseLeftButtonUp" Margin="0,0,0,0" Visibility="Collapsed" />
                 <Label Content="|" Margin="0,-1,0,0" Visibility="Collapsed" />
-                <Label Name="HideSettings" Content="Hide Settings" HorizontalAlignment="Right" Foreground="Blue" MouseLeftButtonUp="Label_MouseLeftButtonUp" Margin="0,0,0,0" />
+                <Label Name="HideSettings" Content="Show Settings" HorizontalAlignment="Right" Foreground="Blue" MouseLeftButtonUp="Label_MouseLeftButtonUp" Margin="0,0,0,0" />
             </StackPanel>
-            <Grid Name="SettingsGrid">
+            <Grid Name="SettingsGrid" Visibility="Collapsed">
                 <WrapPanel Orientation="Horizontal">
                     <Border Background="LightGoldenrodYellow" BorderBrush="LightGray" BorderThickness="1" Margin="3" Padding="3">
                         <StackPanel Orientation="Horizontal">
