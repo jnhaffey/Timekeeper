@@ -107,6 +107,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
     <Reference Include="Xceed.Wpf.AvalonDock">
       <HintPath>..\packages\Extended.Wpf.Toolkit.2.5\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
@@ -216,6 +217,9 @@
     <Compile Include="TimekeeperNavLink.cs" />
     <Compile Include="TimekeeperPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Timeline.xaml.cs">
+      <DependentUpon>Timeline.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimeRecord.cs" />
     <Compile Include="TimeRecordsContext.cs" />
     <Compile Include="TimeSlotsSection.cs" />
@@ -253,6 +257,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Package.ico" />
+    <EmbeddedResource Include="TimelineExLib.dll" />
+    <EmbeddedResource Include="TimelineLibrary.dll" />
     <EmbeddedResource Include="Timekeeper.SettingsTypes.dll" />
     <EmbeddedResource Include="Xceed.Wpf.AvalonDock.dll" />
     <EmbeddedResource Include="Xceed.Wpf.AvalonDock.Themes.Aero.dll" />
@@ -269,6 +275,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Timeline.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -303,6 +313,10 @@
     <ProjectReference Include="..\Timekeeper.SettingsTypes\Timekeeper.SettingsTypes.csproj">
       <Project>{43b7cec4-76f7-43e3-ba81-76cffc95c3f6}</Project>
       <Name>Timekeeper.SettingsTypes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TimelineControl\WPF\TimelineLib\TimelineLib.csproj">
+      <Project>{d2188e92-117c-4e93-a759-5cc251dc226d}</Project>
+      <Name>TimelineLib</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

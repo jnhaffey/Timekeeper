@@ -292,7 +292,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
                                     {
                                         current.EndTime = rev.Timestamp;
                                         current.EndRevision = rev.Revision;
-                                        innerTimeRecords.AddRange(current.Split(WorkdayStart, WorkdayEnd));
+                                        innerTimeRecords.AddRange(current.SplitToRecordPerDay());
                                         current = null;
                                     }
                                 }
@@ -301,7 +301,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
                                 {
                                     current.EndTime = DateTime.Now;
                                     current.EndRevision = -1;
-                                    innerTimeRecords.AddRange(current.Split(WorkdayStart, WorkdayEnd));
+                                    innerTimeRecords.AddRange(current.SplitToRecordPerDay());
                                 }
 
                                 timeRecords.AddRange(innerTimeRecords);
@@ -328,6 +328,47 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
                 // Always clear our busy flag when done
                 this.IsBusy = false;
             }
+        }
+
+        public async void Crop(List<TimeRecord> records, TimeSpan startTime, TimeSpan endTime)
+        {
+            records.ForEach(x =>
+            {
+                x.Crop(startTime, endTime);
+            });
+
+            //TODO use this after setting up a way to persist time adjustments
+            //IsBusy = true;
+            //await System.Threading.Tasks.Task.Factory.StartNew(() =>
+            //{
+            //    records.ForEach(x =>
+            //    {
+            //        x.Crop(startTime, endTime);
+            //    });
+
+            //});
+            //Refresh();
+        }
+
+        internal void Munge(List<TimeRecord> records)
+        {
+            if (!records.All(x => records.First().Item == x.Item))
+            {
+                throw new InvalidOperationException("Records are not all from the same work item & cannot be munged");
+            }
+            var earliest = records.OrderBy(x => x.StartTime).First();
+            var latest = records.OrderBy(x => x.EndTime).Last();
+            var newRecord = new TimeRecord()
+            {
+                StartTime = earliest.StartTime,
+                StartRevision = earliest.StartRevision,
+                EndTime = latest.EndTime,
+                EndRevision = earliest.EndRevision,
+                Item = earliest.Item
+            };
+            records.ForEach(x => TimeRecords.Remove(x));
+            TimeRecords.Add(newRecord);
+            TimeRecords = new ObservableCollection<TimeRecord>(TimeRecords.OrderBy(x => x.StartTime));
         }
     }
 }

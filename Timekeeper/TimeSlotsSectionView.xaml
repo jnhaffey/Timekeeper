@@ -11,43 +11,59 @@
                                      DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid Margin="6,6,6,6">
         <StackPanel Orientation="Vertical">
-            <WrapPanel Orientation="Horizontal">
-                <Border Background="LightGoldenrodYellow" BorderBrush="LightGray" BorderThickness="1" Margin="3" Padding="3">
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Show Ignored: " />
-                        <CheckBox Name="IgnoredCheck" Margin="0,6,5,0" Checked="IgnoredCheck_Checked" Unchecked="IgnoredCheck_Unchecked" />
-                    </StackPanel>
-                </Border>
-                <Border Background="LightGoldenrodYellow" BorderBrush="LightGray" BorderThickness="1" Margin="3" Padding="3">
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Show Exported: " />
-                        <CheckBox Name="ExportedCheck" Margin="0,6,5,0" Checked="ExportedCheck_Checked" Unchecked="ExportedCheck_Unchecked" />
-                    </StackPanel>
-                </Border>
-                <Border Background="LightGoldenrodYellow" BorderBrush="LightGray" BorderThickness="1" Margin="3" Padding="5">
-                    <StackPanel Orientation="Horizontal">
-                        <Label Content="Period: " />
-                        <ComboBox Name="PeriodCombo" SelectionChanged="PeriodCombo_SelectionChanged">
-                            <ComboBox.Items>
-                                <ComboBoxItem Content="One Day" Tag="1" />
-                                <ComboBoxItem Content="Three Days" Selector.IsSelected="True" Tag="3" />
-                                <ComboBoxItem Content="One Week" Tag="7" />
-                                <ComboBoxItem Content="One Month" Tag="28" />
-                                <ComboBoxItem Content="3 Months"  Tag="84" />
-                                <ComboBoxItem Content="6 Months"  Tag="168" />
-                                <ComboBoxItem Content="1 Year"  Tag="365" />
-                            </ComboBox.Items>
-                        </ComboBox>
-                    </StackPanel>
-                </Border>
-                <Border Background="LightGoldenrodYellow" BorderBrush="LightGray" BorderThickness="1" Margin="3" Padding="5">
-                    <Button Content="Settings" Click="Button_Click" />
-                </Border>
-
-            </WrapPanel>
-            <StackPanel Orientation="Horizontal">
-                
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Label Name="ViewTimeline" Content="View Timeline" HorizontalAlignment="Right" Foreground="Blue" MouseLeftButtonUp="ViewTimeline_MouseLeftButtonUp" Margin="0,0,0,0" Visibility="Collapsed" />
+                <Label Content="|" Margin="0,-1,0,0" Visibility="Collapsed" />
+                <Label Name="HideSettings" Content="Hide Settings" HorizontalAlignment="Right" Foreground="Blue" MouseLeftButtonUp="Label_MouseLeftButtonUp" Margin="0,0,0,0" />
             </StackPanel>
+            <Grid Name="SettingsGrid">
+                <WrapPanel Orientation="Horizontal">
+                    <Border Background="LightGoldenrodYellow" BorderBrush="LightGray" BorderThickness="1" Margin="3" Padding="3">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Show Ignored: " />
+                            <CheckBox Name="IgnoredCheck" Margin="0,6,5,0" Checked="IgnoredCheck_Checked" Unchecked="IgnoredCheck_Unchecked" />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="LightGoldenrodYellow" BorderBrush="LightGray" BorderThickness="1" Margin="3" Padding="3">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Show Exported: " />
+                            <CheckBox Name="ExportedCheck" Margin="0,6,5,0" Checked="ExportedCheck_Checked" Unchecked="ExportedCheck_Unchecked" />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="LightGoldenrodYellow" BorderBrush="LightGray" BorderThickness="1" Margin="3" Padding="5">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Period: " />
+                            <ComboBox Name="PeriodCombo" SelectionChanged="PeriodCombo_SelectionChanged">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="One Day" Tag="1" />
+                                    <ComboBoxItem Content="Three Days" Selector.IsSelected="True" Tag="3" />
+                                    <ComboBoxItem Content="One Week" Tag="7" />
+                                    <ComboBoxItem Content="One Month" Tag="28" />
+                                    <ComboBoxItem Content="3 Months"  Tag="84" />
+                                    <ComboBoxItem Content="6 Months"  Tag="168" />
+                                    <ComboBoxItem Content="1 Year"  Tag="365" />
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="LightGoldenrodYellow" BorderBrush="LightGray" BorderThickness="1" Margin="3" Padding="5">
+                        <Button Padding="4" Content="Advanced" Click="Button_Click" />
+                    </Border>
+                    <Border Background="LightGoldenrodYellow" BorderBrush="LightGray" BorderThickness="1" Margin="3" Padding="3">
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                                <Label Content="Crop Start: " />
+                                <xc:TimePicker Name="CropStart" Width="160"  />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
+                                <Label Content="Crop End: " />
+                                <xc:TimePicker Name="CropEnd" Width="160" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </WrapPanel>
+            </Grid>
+
             <!-- Changesets list view -->
             <src:SeeThruListView x:Name="workItemList" ItemsSource="{Binding Path=ParentSection.TimeRecords}" BorderThickness="1"
                   SelectionMode="Extended" ScrollViewer.HorizontalScrollBarVisibility="Hidden" BorderBrush="Black"
@@ -57,6 +73,7 @@
                         <MenuItem Name="MungeMenu" Header="Munge" Click="MenuItem_Click" />
                         <MenuItem Name="ExportMenu" Header="Export" Click="MenuItem_Click" />
                         <MenuItem Name="IgnoreMenu" Header="Ignore" Click="MenuItem_Click" />
+                        <MenuItem Name="CropMenu" Header="Crop" Click="MenuItem_Click" />
                     </ContextMenu>
                 </src:SeeThruListView.ContextMenu>
                 <src:SeeThruListView.View>

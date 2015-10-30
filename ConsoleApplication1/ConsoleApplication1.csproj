@@ -52,6 +52,10 @@
       <Project>{43b7cec4-76f7-43e3-ba81-76cffc95c3f6}</Project>
       <Name>Timekeeper.SettingsTypes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Timekeeper\Timekeeper.csproj">
+      <Project>{b996341b-2997-436c-85b9-2cd9a878ed52}</Project>
+      <Name>Timekeeper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

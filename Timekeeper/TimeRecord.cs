@@ -183,8 +183,10 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
             set { if (_startTime != value) { _startTime = value; Raise("StartTime", "Duration"); } }
         }
 
-        public List<TimeRecord> Split(TimeSpan startTime, TimeSpan endTime)
+        public List<TimeRecord> SplitToRecordPerDay()
         {
+            TimeSpan startTime = new TimeSpan(0,0,0);
+            TimeSpan endTime = new TimeSpan(23, 59, 59);
             var recs = new List<TimeRecord>();
             var finalTime = _endTime.TimeOfDay > endTime ? _endTime.Date.Add(endTime) : _endTime;
             var currentTime = _startTime.TimeOfDay < startTime ? _startTime.Date.Add(startTime) : _startTime;
@@ -211,7 +213,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
                 if (_endTime.Date > rec._startTime.Date) //Split the record
                 {
                     currentTime = rec._startTime.Date.AddDays(1).Add(startTime);
-                    rec._endTime = _startTime.Date.Add(endTime);
+                    rec._endTime = rec._startTime.Date.Add(endTime);
                 }
                 else //Complete the record
                 {
@@ -237,6 +239,18 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
                 {
                     PropertyChanged.Invoke(this, new PropertyChangedEventArgs(prop));
                 }
+            }
+        }
+
+        public void Crop(TimeSpan startTime, TimeSpan endTime)
+        {
+            if (StartTime.TimeOfDay < startTime && EndTime.TimeOfDay > startTime)
+            {
+                StartTime = StartTime.Date.Add(startTime);
+            }
+            if (EndTime.TimeOfDay > endTime && StartTime.TimeOfDay < endTime)
+            {
+                EndTime = EndTime.Date.Add(endTime);
             }
         }
     }

@@ -18,11 +18,16 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
     /// </summary>
     public partial class TimeSlotsSectionView
     {
+        private readonly TimeSpan _startOfDay = new TimeSpan(9, 0, 0);
+        private readonly TimeSpan _endOfDay = new TimeSpan(18, 0, 0);
+
         public static readonly DependencyProperty ParentSectionProperty = DependencyProperty.Register("ParentSection", typeof(TimeSlotsSection), typeof(TimeSlotsSectionView));
 
         public TimeSlotsSectionView()
         {
             this.InitializeComponent();
+            CropStart.Value = DateTime.Now.Date.Add(_startOfDay);
+            CropEnd.Value = DateTime.Now.Date.Add(_endOfDay);
         }
 
         public int SelectedIndex
@@ -94,7 +99,11 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
             }
             else if (e.Source == MungeMenu)
             {
-
+                ParentSection.Munge(records);
+            }
+            else if (e.Source == CropMenu)
+            {
+                ParentSection.Crop(records, CropStart.Value.Value.TimeOfDay, CropEnd.Value.Value.TimeOfDay);
             }
         }
 
@@ -114,6 +123,10 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
                 if (records.All(x => x.CanIgnore && !x.IsIgnored))
                 {
                     IgnoreMenu.IsEnabled = true;
+                }
+                if (records.All(x => records.First().Item == x.Item))
+                {
+                    MungeMenu.IsEnabled = true;
                 }
             }
         }
@@ -181,6 +194,26 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
         {
             var _settings = new Settings();
             _settings.ShowDialog();
+        }
+
+        private void Label_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (SettingsGrid.Visibility == System.Windows.Visibility.Visible)
+            {
+                SettingsGrid.Visibility = System.Windows.Visibility.Collapsed;
+                HideSettings.Content = "Show Settings";
+            }
+            else
+            {
+                SettingsGrid.Visibility = System.Windows.Visibility.Visible;
+                HideSettings.Content = "Hide Settings";
+            }
+        }
+
+        private void ViewTimeline_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var tl = new Timeline(ParentSection.TimeRecords);
+            tl.Show();
         }
     }
 }
