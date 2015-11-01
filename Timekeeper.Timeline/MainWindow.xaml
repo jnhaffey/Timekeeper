@@ -1,0 +1,16 @@
+﻿<Window x:Class="Timekeeper.Timeline.MainWindow"
+        xmlns:l="clr-namespace:Timekeeper.Timeline"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Margin="5" Orientation="Vertical" Grid.Row="0" HorizontalAlignment="Left">
+            <Button Content="Toggle Evenings &amp; Weekends" Tag="True" Width="200" Click="Button_Click" />
+        </StackPanel>
+        <l:TimesheetControl x:Name="Timesheet" ShowOutOfHours="False" Grid.Row="1" DataContext="{Binding Path=Days}" />
+    </Grid>
+</Window>

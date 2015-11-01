@@ -32,6 +32,30 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public int StartMinuteOfDay
+        {
+            get
+            {
+                return (int)Math.Floor(StartTime.TimeOfDay.TotalMinutes);
+            }
+            set
+            {
+                StartTime = StartTime.Date.AddMinutes(value);
+            }
+        }
+
+        public int EndMinuteOfDay
+        {
+            get
+            {
+                return (int)Math.Floor(EndTime.TimeOfDay.TotalMinutes);
+            }
+            set
+            {
+                EndTime = EndTime.Date.AddMinutes(value);
+            }
+        }
+
         public string Case
         {
             get
@@ -48,6 +72,14 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
             }
         }
 
+        public int TotalMinutes
+        {
+            get
+            {
+                return (int)Math.Floor(Duration.TotalMinutes);
+            }
+        }
+
         public int EndRevision
         {
             get { return _endRevision; }
@@ -57,7 +89,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
         public DateTime EndTime
         {
             get { return _endTime; }
-            set { if (_endTime != value) { _endTime = value; Raise("EndTime", "Duration"); } }
+            set { if (_endTime != value) { _endTime = value; Raise("EndTime", "Duration", "EndMinuteOfDay", "TotalMinutes"); } }
         }
 
         public bool IsExported
@@ -160,7 +192,8 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
         {
             get
             {
-                return Item == null ? null : Item.Title;
+                //TODO remove test output GUID
+                return Item == null ? Guid.NewGuid().ToString() : Item.Title;
             }
         }
 
@@ -177,10 +210,11 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
             get { return _startRevision; }
             set { _startRevision = value; Raise("StartRevision", "IsExported", "IsIgnored", "IsIgnoredOrExported"); }
         }
+
         public DateTime StartTime
         {
             get { return _startTime; }
-            set { if (_startTime != value) { _startTime = value; Raise("StartTime", "Duration"); } }
+            set { if (_startTime != value) { _startTime = value; Raise("StartTime", "Duration", "StartMinuteOfDay", "TotalMinutes"); } }
         }
 
         public List<TimeRecord> SplitToRecordPerDay()
@@ -252,6 +286,19 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
             {
                 EndTime = EndTime.Date.Add(endTime);
             }
+        }
+
+        public bool Overlaps(TimeRecord record)
+        {
+            return this != record && (
+                   (record.StartTime < StartTime && record.EndTime > EndTime) || //encompasses this record
+                   (record.StartTime < EndTime && record.StartTime > StartTime) || //starts in this record
+                   (record.EndTime < EndTime && record.EndTime > StartTime)); //ends in this record
+        }
+
+        public bool OverlapsAny(IEnumerable<TimeRecord> record)
+        {
+            return record.Any(x => Overlaps(x));
         }
     }
 }

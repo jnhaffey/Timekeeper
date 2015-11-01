@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApplication1", "Cons
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimelineLib", "TimelineControl\WPF\TimelineLib\TimelineLib.csproj", "{D2188E92-117C-4E93-A759-5CC251DC226D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timekeeper.Timeline", "Timekeeper.Timeline\Timekeeper.Timeline.csproj", "{BBA07855-ACAC-48DC-924E-F60CDC12C558}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{D2188E92-117C-4E93-A759-5CC251DC226D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2188E92-117C-4E93-A759-5CC251DC226D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2188E92-117C-4E93-A759-5CC251DC226D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBA07855-ACAC-48DC-924E-F60CDC12C558}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBA07855-ACAC-48DC-924E-F60CDC12C558}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBA07855-ACAC-48DC-924E-F60CDC12C558}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBA07855-ACAC-48DC-924E-F60CDC12C558}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

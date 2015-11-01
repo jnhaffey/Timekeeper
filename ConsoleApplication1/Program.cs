@@ -23,15 +23,15 @@ namespace ConsoleApplication1
             //x.Serialize(File.Create("E:\\output.xml"), psnc);
             //Console.ReadLine();
 
-            TimeRecord t = new TimeRecord()
-            {
-                StartTime = DateTime.Now.AddDays(-7),
-                EndTime = DateTime.Now.AddDays(-2),
-                StartRevision = 0,
-                EndRevision = 2
-            };
-            var ts = t.SplitToRecordPerDay();
-            ts.ForEach(x => x.Crop(new TimeSpan(9,0,0), new TimeSpan(18,0,0)));
+            //TimeRecord t = new TimeRecord()
+            //{
+            //    StartTime = DateTime.Now.AddDays(-7),
+            //    EndTime = DateTime.Now.AddDays(-2),
+            //    StartRevision = 0,
+            //    EndRevision = 2
+            //};
+            //var ts = t.SplitToRecordPerDay();
+            //ts.ForEach(x => x.Crop(new TimeSpan(9,0,0), new TimeSpan(18,0,0)));
         }
     }
 }

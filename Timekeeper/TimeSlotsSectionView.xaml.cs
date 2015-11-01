@@ -12,6 +12,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
     using System.Linq;
     using System.Windows.Controls;
     using Company.Timekeeper;
+    using Timekeeper.Timeline;
 
     /// <summary>
     /// WorkItemsSectionView
@@ -212,7 +213,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
 
         private void ViewTimeline_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            var tl = new Timeline(ParentSection.TimeRecords);
+            var tl = new MainWindow(ParentSection.TimeRecords);
             tl.Show();
         }
     }
