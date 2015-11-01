@@ -24,6 +24,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -34,11 +35,11 @@
     <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Company.Timekeeper</RootNamespace>
-    <AssemblyName>Timekeeper</AssemblyName>
+    <RootNamespace>Timekeeper.VsExtension</RootNamespace>
+    <AssemblyName>Timekeeper.VsExtension</AssemblyName>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>
@@ -65,7 +66,14 @@
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Crm.Sdk.Proxy">
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.7.1.1\lib\net45\Microsoft.Crm.Sdk.Proxy.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.TeamFoundation.Client, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.TeamFoundation.Controls, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.TeamFoundation.VersionControl.Client, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
@@ -95,6 +103,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\ReferenceAssemblies\v4.5\Microsoft.TeamFoundation.WorkItemTracking.Controls.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Xrm.Sdk">
+      <HintPath>..\packages\Microsoft.CrmSdk.CoreAssemblies.7.1.1\lib\net45\Microsoft.Xrm.Sdk.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -102,7 +113,15 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Design" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
@@ -189,12 +208,15 @@
     <Compile Include="Base\TeamExplorerBaseNavigationLink.cs" />
     <Compile Include="Base\TeamExplorerBasePage.cs" />
     <Compile Include="Base\TeamExplorerBaseSection.cs" />
+    <Compile Include="CategorySelection.xaml.cs">
+      <DependentUpon>CategorySelection.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CurrentlyWorkingOnSection.cs" />
-    <Compile Include="Global.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="Internals\ChangesSectionContext.cs" />
     <Compile Include="Internals\ListExtension.cs" />
     <Compile Include="Internals\VSMruList.cs" />
+    <Compile Include="ITimekeeperExporter.cs" />
     <Compile Include="MyTimePage.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -253,6 +275,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Newtonsoft.Json.dll" />
+    <EmbeddedResource Include="Microsoft.Crm.Sdk.Proxy.dll" />
+    <EmbeddedResource Include="Microsoft.Xrm.Sdk.dll" />
     <Content Include="Resources\Package.ico" />
     <EmbeddedResource Include="Timekeeper.Timeline.exe" />
     <EmbeddedResource Include="Timekeeper.SettingsTypes.dll" />
@@ -266,6 +290,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="CategorySelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CurrentlyWorkingOnSectionView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -302,6 +330,14 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Timekeeper.Crm\Timekeeper.Crm.csproj">
+      <Project>{a47ddb71-b8fd-4e7a-b6c9-e763aea4af0f}</Project>
+      <Name>Timekeeper.Crm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Timekeeper.Entities\Timekeeper.Entities.csproj">
+      <Project>{abc652ba-3541-460d-b415-987d28313b8f}</Project>
+      <Name>Timekeeper.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Timekeeper.SettingsTypes\Timekeeper.SettingsTypes.csproj">
       <Project>{43b7cec4-76f7-43e3-ba81-76cffc95c3f6}</Project>
       <Name>Timekeeper.SettingsTypes</Name>
@@ -309,10 +345,6 @@
     <ProjectReference Include="..\Timekeeper.Timeline\Timekeeper.Timeline.csproj">
       <Project>{bba07855-acac-48dc-924e-f60cdc12c558}</Project>
       <Name>Timekeeper.Timeline</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TimelineControl\WPF\TimelineLib\TimelineLib.csproj">
-      <Project>{d2188e92-117c-4e93-a759-5cc251dc226d}</Project>
-      <Name>TimelineLib</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

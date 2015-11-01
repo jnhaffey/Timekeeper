@@ -1,12 +1,12 @@
 ﻿// <copyright file="MyHistoryPage.cs" company="Microsoft Corporation">Copyright Microsoft Corporation. All Rights Reserved. This code released under the terms of the Microsoft Public License (MS-PL, http://opensource.org/licenses/ms-pl.html.) This is sample code only, do not use in production environments.</copyright>
-namespace Microsoft.ALMRangers.Samples.MyHistory
-{
-    using Microsoft.TeamFoundation.Controls;
+using Microsoft.TeamFoundation.Controls;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-    using System;
-    using System.Reflection;
+using System;
+using System.Reflection;
 
+namespace Timekeeper.VsExtension
+{
     /// <summary>
     /// MyHistory Page. We are extending Team Explorer by adding a new page and therefore use the TeamExplorerPage attribute and pass in our unique ID
     /// </summary>
@@ -30,7 +30,7 @@ using Microsoft.VisualStudio.Shell.Interop;
         {
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
-                String resourceName = "Company.Timekeeper." +
+                String resourceName = "Timekeeper.VsExtension." +
 
                    new AssemblyName(args.Name).Name + ".dll";
                 var names = typeof(MyTimePage).Assembly.GetManifestResourceNames();

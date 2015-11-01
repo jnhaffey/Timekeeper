@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BBA07855-ACAC-48DC-924E-F60CDC12C558}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{C30C521F-F969-4B9B-BAB8-D67BAEBFC949}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Timekeeper.Timeline</RootNamespace>
-    <AssemblyName>Timekeeper.Timeline</AssemblyName>
+    <RootNamespace>Timekeeper.Timeline.Standalone</RootNamespace>
+    <AssemblyName>Timekeeper.Timeline.Standalone</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -33,18 +33,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.TeamFoundation.VersionControl.Client, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.TeamFoundation.WorkItemTracking.Client, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -60,40 +49,14 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions.cs" />
-    <Compile Include="GridHelpers.cs" />
-    <Compile Include="TimelineControl.xaml.cs">
-      <DependentUpon>TimelineControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TimelineLaneModel.cs" />
-    <Compile Include="TimelineModel.cs" />
-    <Compile Include="TimesheetControl.xaml.cs">
-      <DependentUpon>TimesheetControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TimesheetModel.cs" />
-    <Compile Include="TimeslotControl.xaml.cs">
-      <DependentUpon>TimeslotControl.xaml</DependentUpon>
-    </Compile>
-    <Page Include="TimesheetWindow.xaml">
+    <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="TimesheetWindow.xaml.cs">
-      <DependentUpon>TimesheetWindow.xaml</DependentUpon>
+    </ApplicationDefinition>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="TimelineControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="TimesheetControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="TimeslotControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -113,7 +76,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Key.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -121,9 +83,12 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Timekeeper.Entities\Timekeeper.Entities.csproj">
-      <Project>{abc652ba-3541-460d-b415-987d28313b8f}</Project>
-      <Name>Timekeeper.Entities</Name>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Timekeeper.Timeline\Timekeeper.Timeline.csproj">
+      <Project>{bba07855-acac-48dc-924e-f60cdc12c558}</Project>
+      <Name>Timekeeper.Timeline</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

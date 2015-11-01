@@ -1,6 +1,6 @@
-﻿<UserControl x:Class="Microsoft.ALMRangers.Samples.MyHistory.TimeSlotsSectionView"
+﻿<UserControl x:Class="Timekeeper.VsExtension.TimeSlotsSectionView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:src="clr-namespace:Microsoft.ALMRangers.Samples.MyHistory"
+             xmlns:src="clr-namespace:Timekeeper.VsExtension"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -36,8 +36,10 @@
                             <ComboBox Name="PeriodCombo" SelectionChanged="PeriodCombo_SelectionChanged">
                                 <ComboBox.Items>
                                     <ComboBoxItem Content="One Day" Tag="1" />
-                                    <ComboBoxItem Content="Three Days" Selector.IsSelected="True" Tag="3" />
-                                    <ComboBoxItem Content="One Week" Tag="7" />
+                                    <ComboBoxItem Content="Three Days" Tag="3" />
+                                    <ComboBoxItem Content="One Week" Selector.IsSelected="True" Tag="7" />
+                                    <ComboBoxItem Content="Two Weeks" Tag="14" />
+                                    <ComboBoxItem Content="Three Weeks" Tag="21" />
                                     <ComboBoxItem Content="One Month" Tag="28" />
                                     <ComboBoxItem Content="3 Months"  Tag="84" />
                                     <ComboBoxItem Content="6 Months"  Tag="168" />

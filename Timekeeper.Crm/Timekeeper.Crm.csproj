@@ -30,6 +30,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AntiXSSLibrary">
       <HintPath>..\packages\Microsoft.CrmSdk.Extensions.7.1.0\lib\net45\AntiXSSLibrary.dll</HintPath>
@@ -79,13 +85,14 @@
     <Compile Include="Xrm.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Timekeeper.Timeline\Timekeeper.Timeline.csproj">
-      <Project>{bba07855-acac-48dc-924e-f60cdc12c558}</Project>
-      <Name>Timekeeper.Timeline</Name>
-    </ProjectReference>
+    <None Include="Key.snk" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\Timekeeper.Entities\Timekeeper.Entities.csproj">
+      <Project>{abc652ba-3541-460d-b415-987d28313b8f}</Project>
+      <Name>Timekeeper.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

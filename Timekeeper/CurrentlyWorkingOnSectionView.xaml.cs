@@ -1,5 +1,5 @@
 ﻿// <copyright file="WorkItemsSectionView.xaml.cs" company="Microsoft Corporation">Copyright Microsoft Corporation. All Rights Reserved. This code released under the terms of the Microsoft Public License (MS-PL, http://opensource.org/licenses/ms-pl.html.) This is sample code only, do not use in production environments.</copyright>
-namespace Microsoft.ALMRangers.Samples.MyHistory
+namespace Timekeeper.VsExtension
 {
     using System.Windows;
     using System.Windows.Input;
@@ -8,7 +8,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
     using System.Collections.ObjectModel;
     using System;
     using Xceed.Wpf.Toolkit;
-    using Company.Timekeeper.Properties;
+    using Timekeeper.VsExtension.Properties;
 
     /// <summary>
     /// WorkItemsSectionView
@@ -51,16 +51,16 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
 
         private void workItemList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (ParentSection.WorkItems[SelectedIndex].State == Settings.Default.StateNameConfiguration.GetActiveState(ParentSection.WorkItems[SelectedIndex].Project.Name))
+            if (ParentSection.WorkItems[SelectedIndex].State == Properties.Settings.Default.SettingsCollection.GetActiveState(ParentSection.WorkItems[SelectedIndex].Project.Name))
             {
                 ParentSection.WorkItems[SelectedIndex].PartialOpen();
-                ParentSection.WorkItems[SelectedIndex].State = Settings.Default.StateNameConfiguration.GetPausedState(ParentSection.WorkItems[SelectedIndex].Project.Name);
+                ParentSection.WorkItems[SelectedIndex].State = Properties.Settings.Default.SettingsCollection.GetPausedState(ParentSection.WorkItems[SelectedIndex].Project.Name);
                 ParentSection.WorkItems[SelectedIndex].Save();
             }
             else
             {
                 ParentSection.WorkItems[SelectedIndex].PartialOpen();
-                ParentSection.WorkItems[SelectedIndex].State = Settings.Default.StateNameConfiguration.GetActiveState(ParentSection.WorkItems[SelectedIndex].Project.Name);
+                ParentSection.WorkItems[SelectedIndex].State = Properties.Settings.Default.SettingsCollection.GetActiveState(ParentSection.WorkItems[SelectedIndex].Project.Name);
                 ParentSection.WorkItems[SelectedIndex].Save();
             }
             ParentSection.Refresh();

@@ -15,11 +15,11 @@ using Microsoft.VisualStudio.TeamFoundation;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.VersionControl.Client;
 using System.Collections.Generic;
-using Company.Timekeeper.Properties;
-using Microsoft.ALMRangers.Samples.MyHistory;
+using Timekeeper.VsExtension.Properties;
+using Timekeeper.VsExtension;
 using System.ComponentModel.Composition;
 
-namespace Company.Timekeeper
+namespace Timekeeper.VsExtension
 {
     /// <summary>
     /// This is the class that implements the package exposed by this assembly.
@@ -101,10 +101,10 @@ namespace Company.Timekeeper
             {
                 foreach (var item in shelf.WorkItemInfo)
                 {
-                    if (item.WorkItem.State == Properties.Settings.Default.StateNameConfiguration.GetActiveState(item.WorkItem.Project.Name))
+                    if (item.WorkItem.State == Properties.Settings.Default.SettingsCollection.GetActiveState(item.WorkItem.Project.Name))
                     {
                         item.WorkItem.PartialOpen();
-                        item.WorkItem.State = Properties.Settings.Default.StateNameConfiguration.GetPausedState(item.WorkItem.Project.Name);
+                        item.WorkItem.State = Properties.Settings.Default.SettingsCollection.GetPausedState(item.WorkItem.Project.Name);
                         //TODO configurable
                         item.WorkItem.Reason = "My Work Suspended";
                         item.WorkItem.Save();
@@ -118,10 +118,10 @@ namespace Company.Timekeeper
             var shelf = e.Shelveset;
             foreach (var item in shelf.WorkItemInfo)
             {
-                if (item.WorkItem.State != Properties.Settings.Default.StateNameConfiguration.GetActiveState(item.WorkItem.Project.Name))
+                if (item.WorkItem.State != Properties.Settings.Default.SettingsCollection.GetActiveState(item.WorkItem.Project.Name))
                 {
                     item.WorkItem.PartialOpen();
-                    item.WorkItem.State = Properties.Settings.Default.StateNameConfiguration.GetActiveState(item.WorkItem.Project.Name);
+                    item.WorkItem.State = Properties.Settings.Default.SettingsCollection.GetActiveState(item.WorkItem.Project.Name);
                     //TODO configurable
                     item.WorkItem.Reason = "My Work Resumed";
                     item.WorkItem.Save();

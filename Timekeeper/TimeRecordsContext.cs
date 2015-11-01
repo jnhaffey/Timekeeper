@@ -1,12 +1,13 @@
 using System.Collections.ObjectModel;
+using Timekeeper.Entities;
 
-namespace Microsoft.ALMRangers.Samples.MyHistory
+namespace Timekeeper.VsExtension
 {
     public class TimeRecordsContext
     {
-        private ObservableCollection<TimeRecord> timeRecords = new ObservableCollection<TimeRecord>();
+        private ObservableCollection<TimeRecordBase> timeRecords = new ObservableCollection<TimeRecordBase>();
 
-        public ObservableCollection<TimeRecord> TimeRecords
+        public ObservableCollection<TimeRecordBase> TimeRecords
         {
             get
             {

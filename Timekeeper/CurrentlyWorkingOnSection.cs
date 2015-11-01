@@ -1,4 +1,4 @@
-using Company.Timekeeper.Properties;
+using Timekeeper.VsExtension.Properties;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.Controls;
 using Microsoft.TeamFoundation.VersionControl.Client;
@@ -15,7 +15,7 @@ using System.Linq;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace Microsoft.ALMRangers.Samples.MyHistory
+namespace Timekeeper.VsExtension
 {
     [TeamExplorerSection(CurrentlyWorkingOnSection.SectionId, Microsoft.TeamFoundation.Controls.TeamExplorerPageIds.PendingChanges, 0)]
     public class CurrentlyWorkingOnSection : TeamExplorerBaseSection
@@ -49,7 +49,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
         /// <summary>
         /// ContextChanged override.
         /// </summary>
-        protected override void ContextChanged(object sender, TeamFoundation.Client.ContextChangedEventArgs e)
+        protected override void ContextChanged(object sender, ContextChangedEventArgs e)
         {
             base.ContextChanged(sender, e);
 

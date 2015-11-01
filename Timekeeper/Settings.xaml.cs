@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using System.Xml.Serialization;
 using Timekeeper.SettingsTypes;
 
-namespace Company.Timekeeper
+namespace Timekeeper.VsExtension
 {
     /// <summary>
     /// Interaction logic for Settings.xaml
@@ -26,10 +26,10 @@ namespace Company.Timekeeper
         {
             InitializeComponent();
             var serial = new StringBuilder();
-            XmlSerializer xml = new XmlSerializer(Properties.Settings.Default.StateNameConfiguration.GetType());
+            XmlSerializer xml = new XmlSerializer(Properties.Settings.Default.SettingsCollection.GetType());
             using (var textStream = new StringWriter(serial))
             {
-                xml.Serialize(textStream, Properties.Settings.Default.StateNameConfiguration);
+                xml.Serialize(textStream, Properties.Settings.Default.SettingsCollection);
             }
             TextBox.Text = serial.ToString();
         }
@@ -37,10 +37,10 @@ namespace Company.Timekeeper
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             var serial = new StringBuilder();
-            XmlSerializer xml = new XmlSerializer(Properties.Settings.Default.StateNameConfiguration.GetType());
+            XmlSerializer xml = new XmlSerializer(Properties.Settings.Default.SettingsCollection.GetType());
             using (var textStream = new StringReader(TextBox.Text))
             {
-                Properties.Settings.Default.StateNameConfiguration = (ProjectStateNamesCollection)xml.Deserialize(textStream);
+                Properties.Settings.Default.SettingsCollection = (ProjectSettingsCollection)xml.Deserialize(textStream);
             }
             Properties.Settings.Default.Save();
             this.Close();

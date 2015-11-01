@@ -1,4 +1,4 @@
-﻿using Company.Timekeeper.Properties;
+﻿using Timekeeper.VsExtension.Properties;
 using EnvDTE;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.Controls;
@@ -22,47 +22,21 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Timekeeper.Entities;
+using Timekeeper.Crm;
+
 // <copyright file="WorkItemsSection.cs" company="Microsoft Corporation">Copyright Microsoft Corporation. All Rights Reserved. This code released under the terms of the Microsoft Public License (MS-PL, http://opensource.org/licenses/ms-pl.html.) This is sample code only, do not use in production environments.</copyright>
-namespace Microsoft.ALMRangers.Samples.MyHistory
+namespace Timekeeper.VsExtension
 {
-    public interface ITimekeeperExporter
-    {
-        void Export(IEnumerable<TimeRecord> records);
-    }
-
-    public class FlatFileExporter : ITimekeeperExporter
-    {
-        public void Export(IEnumerable<TimeRecord> records)
-        {
-            var myDocs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            string filename;
-            var originalFilename = filename = "Timekeeper Export " + DateTime.Now.ToString("yyyy-MM-dd");
-            int i = 1;
-            while(File.Exists(Path.Combine(myDocs, filename + ".csv")))
-            {
-                filename = originalFilename + "(" + i + ")";
-                i++;
-            }
-            using (var stream = File.CreateText(Path.Combine(myDocs, filename + ".csv")))
-            {
-                stream.WriteLine("Case,Order,StartTime,EndTime,WorkItemTitle");
-                foreach(var record in records)
-                {
-                    stream.WriteLine(string.Format("{0},{1},{2:yyyy-MM-dd HH\\:mm\\:ss\\.fffff},{3:yyyy-MM-dd HH\\:mm\\:ss\\.fffff},{4}", record.Case, record.Order, record.StartTime, record.EndTime, record.ItemTitle));
-                }
-            }
-        }
-    }
-
     [TeamExplorerSection(TimeSlotsSection.SectionId, MyTimePage.PageId, 30)]
     public class TimeSlotsSection : TeamExplorerBaseSection
     {
         public const string SectionId = "5A59685E-AAB8-4F65-8A29-D67ED0CD845E";
         private bool _showExported = false;
         private bool _showIgnored = false;
-        private ObservableCollection<TimeRecord> timeRecords = new ObservableCollection<TimeRecord>();
+        private ObservableCollection<TimeRecordBase> timeRecords = new ObservableCollection<TimeRecordBase>();
         //TODO invert control
-        private ITimekeeperExporter _exporter = new FlatFileExporter();
+        private ITimekeeperExporter _exporter = new CrmExporter();
 
         public TimeSlotsSection()
         {
@@ -116,7 +90,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
             }
         }
 
-        public ObservableCollection<TimeRecord> TimeRecords
+        public ObservableCollection<TimeRecordBase> TimeRecords
         {
             get
             {
@@ -142,7 +116,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
         /// <summary>
         /// ContextChanged override.
         /// </summary>
-        protected override async void ContextChanged(object sender, TeamFoundation.Client.ContextChangedEventArgs e)
+        protected override async void ContextChanged(object sender, ContextChangedEventArgs e)
         {
             base.ContextChanged(sender, e);
 
@@ -153,12 +127,12 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
             }
         }
 
-        public async void Export(List<TimeRecord> records)
+        public async void Export(List<WorkItemTimeRecord> records)
         {
             IsBusy = true;
+            await _exporter.Export(records);
             await System.Threading.Tasks.Task.Factory.StartNew(() =>
                 {
-                    _exporter.Export(records);
                     records.ForEach(x =>
                     {
                         x.SetExported();
@@ -168,7 +142,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
             Refresh();
         }
 
-        public async void Ignore(List<TimeRecord> records)
+        public async void Ignore(List<WorkItemTimeRecord> records)
         {
             IsBusy = true;
             await System.Threading.Tasks.Task.Factory.StartNew(() =>
@@ -247,7 +221,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
                 // Set our busy flag and clear the previous data
                 this.IsBusy = true;
                 this.TimeRecords.Clear();
-                var timeRecords = new List<TimeRecord>();
+                var timeRecords = new List<TimeRecordBase>();
 
                 // Make the server call asynchronously to avoid blocking the UI
                 await System.Threading.Tasks.Task.Run(() =>
@@ -265,7 +239,12 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
                             WorkItemCollection wic = wis.Query("SELECT [System.Id], [System.Title], [System.State] FROM WorkItems WHERE [System.WorkItemType] <> ''  AND  [System.State] <> ''  AND  [System.ChangedDate] > @Today - " + Days + "  AND  [System.AssignedTo] EVER @Me ORDER BY [System.Id]");
                             foreach (WorkItem wi in wic)
                             {
-                                var innerTimeRecords = new List<TimeRecord>();
+                                if (!Properties.Settings.Default.SettingsCollection.IsIncluded(wi.Project.Name))
+                                {
+                                    continue;
+                                }
+
+                                var innerTimeRecords = new List<TimeRecordBase>();
 
                                 var revs = wi.Revisions.Cast<Revision>()
                                       .Where(revision => revision.Fields["System.State"].IsChangedInRevision)
@@ -281,12 +260,12 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
                                       })
                                       .OrderBy(revision => revision.Timestamp).ToList();
 
-                                TimeRecord current = null;
+                                WorkItemTimeRecord current = null;
                                 foreach (var rev in revs)
                                 {
-                                    if (rev.State == Settings.Default.StateNameConfiguration.GetActiveState(wi.Project.Name))
+                                    if (rev.State == Properties.Settings.Default.SettingsCollection.GetActiveState(wi.Project.Name))
                                     {
-                                        current = new TimeRecord() { Item = rev.Item, StartTime = rev.Timestamp, StartRevision = rev.Revision };
+                                        current = new WorkItemTimeRecord() { Item = rev.Item, StartTime = rev.Timestamp, StartRevision = rev.Revision };
                                     }
                                     else if (current != null && current.EndTime == DateTime.MaxValue)
                                     {
@@ -317,7 +296,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
                 });
 
                 // Now back on the UI thread, update the bound collection and section title
-                this.TimeRecords = new ObservableCollection<TimeRecord>(timeRecords);
+                this.TimeRecords = new ObservableCollection<TimeRecordBase>(timeRecords);
             }
             catch (Exception ex)
             {
@@ -330,7 +309,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
             }
         }
 
-        public async void Crop(List<TimeRecord> records, TimeSpan startTime, TimeSpan endTime)
+        public void Crop(List<WorkItemTimeRecord> records, TimeSpan startTime, TimeSpan endTime)
         {
             records.ForEach(x =>
             {
@@ -350,7 +329,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
             //Refresh();
         }
 
-        internal void Munge(List<TimeRecord> records)
+        internal void Munge(List<WorkItemTimeRecord> records)
         {
             if (!records.All(x => records.First().Item == x.Item))
             {
@@ -358,7 +337,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
             }
             var earliest = records.OrderBy(x => x.StartTime).First();
             var latest = records.OrderBy(x => x.EndTime).Last();
-            var newRecord = new TimeRecord()
+            var newRecord = new WorkItemTimeRecord()
             {
                 StartTime = earliest.StartTime,
                 StartRevision = earliest.StartRevision,
@@ -368,7 +347,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
             };
             records.ForEach(x => TimeRecords.Remove(x));
             TimeRecords.Add(newRecord);
-            TimeRecords = new ObservableCollection<TimeRecord>(TimeRecords.OrderBy(x => x.StartTime));
+            TimeRecords = new ObservableCollection<TimeRecordBase>(TimeRecords.OrderBy(x => x.StartTime));
         }
     }
 }

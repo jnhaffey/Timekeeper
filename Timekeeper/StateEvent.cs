@@ -1,7 +1,7 @@
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using System;
 
-namespace Microsoft.ALMRangers.Samples.MyHistory
+namespace Timekeeper.VsExtension
 {
     public class StateEvent
     {

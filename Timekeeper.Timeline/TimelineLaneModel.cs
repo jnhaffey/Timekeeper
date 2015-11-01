@@ -1,20 +1,20 @@
-using Microsoft.ALMRangers.Samples.MyHistory;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Linq;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using Timekeeper.Entities;
 
 namespace Timekeeper.Timeline
 {
     public class TimelineLaneModel : INotifyPropertyChanged
     {
         private int _laneNumber;
-        private ObservableCollection<TimeRecord> _items;
+        private ObservableCollection<TimeRecordBase> _items;
         public TimelineLaneModel()
         {
-            Items = new ObservableCollection<TimeRecord>();
+            Items = new ObservableCollection<TimeRecordBase>();
         }
 
         public int LaneNumber
@@ -54,7 +54,7 @@ namespace Timekeeper.Timeline
             }
         }
 
-        public ObservableCollection<TimeRecord> Items
+        public ObservableCollection<TimeRecordBase> Items
         {
             get
             {

@@ -1,12 +1,13 @@
-﻿using Microsoft.ALMRangers.Samples.MyHistory;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using Timekeeper.Entities;
 
 namespace Timekeeper.Timeline
 {
@@ -14,12 +15,12 @@ namespace Timekeeper.Timeline
     {
         private ObservableCollection<TimelineLaneModel> _lanes = new ObservableCollection<TimelineLaneModel>();
 
-        private ObservableCollection<TimeRecord> _records;
+        private ObservableCollection<TimeRecordBase> _records;
 
         public TimelineModel(DayOfWeek day)
         {
             _day = day;
-            Records = new ObservableCollection<TimeRecord>();
+            Records = new ObservableCollection<TimeRecordBase>();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -75,7 +76,7 @@ namespace Timekeeper.Timeline
             }
         }
 
-        public ObservableCollection<TimeRecord> Records
+        public ObservableCollection<TimeRecordBase> Records
         {
             get
             {
@@ -132,7 +133,7 @@ namespace Timekeeper.Timeline
 
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove || e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset || e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
             {
-                foreach (var x in e.OldItems.Cast<TimeRecord>())
+                foreach (var x in e.OldItems.Cast<WorkItemTimeRecord>())
                 {
                     x.PropertyChanged -= x_PropertyChanged;
                 }
@@ -140,7 +141,7 @@ namespace Timekeeper.Timeline
 
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add || e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
             {
-                foreach(var x in e.NewItems.Cast<TimeRecord>())
+                foreach(var x in e.NewItems.Cast<WorkItemTimeRecord>())
                 {
                     x.PropertyChanged += x_PropertyChanged;
                 }
@@ -152,67 +153,75 @@ namespace Timekeeper.Timeline
 
         private void RecalculateLanes()
         {
-            if (_recalculatingLanes)
+            if (Application.Current.MainWindow.Dispatcher.CheckAccess())
             {
-                return;
-            }
-            _recalculatingLanes = true;
-            var currentlyDragging = App.Current.MainWindow.FindVisualChildren<TimeslotControl>().Where(x => x.HoldingStart || x.HoldingEnd).Select(x => x.Model);
-
-            foreach(var lane in Lanes.ToList())
-            {
-                var overlappers = lane.Items.Where(x => x.OverlapsAny(lane.Items)).Except(currentlyDragging).ToList();
-                while (overlappers.Count > 0)
+                if (_recalculatingLanes)
                 {
-                    lane.Items.Remove(overlappers.First());
-                    var newLane = new TimelineLaneModel() { LaneNumber = Lanes.Count + 1 };
-                    newLane.Items.Add(overlappers.First());
-                    Lanes.Add(newLane);
-                    overlappers = lane.Items.Where(x => x.OverlapsAny(lane.Items)).ToList();
+                    return;
                 }
-            }
 
-            foreach(var lane in Lanes.OrderByDescending(x => x.LaneNumber).ToList())
-            {
-                foreach (var item in lane.Items.ToList())
+                _recalculatingLanes = true;
+                var currentlyDragging = Application.Current.MainWindow.FindVisualChildren<TimeslotControl>().Where(x => x.HoldingStart || x.HoldingEnd).Select(x => x.Model);
+
+                foreach (var lane in Lanes.ToList())
                 {
-                    foreach(var lane2 in Lanes.Where(x => x.LaneNumber < lane.LaneNumber).ToList())
+                    var overlappers = lane.Items.Where(x => x.OverlapsAny(lane.Items)).Except(currentlyDragging).ToList();
+                    while (overlappers.Count > 0)
                     {
-                        if (!item.OverlapsAny(lane2.Items))
+                        lane.Items.Remove(overlappers.First());
+                        var newLane = new TimelineLaneModel() { LaneNumber = Lanes.Count + 1 };
+                        newLane.Items.Add(overlappers.First());
+                        Lanes.Add(newLane);
+                        overlappers = lane.Items.Where(x => x.OverlapsAny(lane.Items)).ToList();
+                    }
+                }
+
+                foreach (var lane in Lanes.OrderByDescending(x => x.LaneNumber).ToList())
+                {
+                    foreach (var item in lane.Items.ToList())
+                    {
+                        foreach (var lane2 in Lanes.Where(x => x.LaneNumber < lane.LaneNumber).ToList())
                         {
-                            if (currentlyDragging.Contains(item))
+                            if (!item.OverlapsAny(lane2.Items))
                             {
-                                foreach(var item2 in lane2.Items.ToList())
+                                if (currentlyDragging.Contains(item))
                                 {
-                                    lane.Items.Add(item2);
-                                    lane2.Items.Remove(item2);
+                                    foreach (var item2 in lane2.Items.ToList())
+                                    {
+                                        lane.Items.Add(item2);
+                                        lane2.Items.Remove(item2);
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                lane2.Items.Add(item);
-                                lane.Items.Remove(item);
+                                else
+                                {
+                                    lane2.Items.Add(item);
+                                    lane.Items.Remove(item);
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            foreach (var lane in Lanes.ToList())
-            {
-                if (lane.Items.Count == 0)
+                foreach (var lane in Lanes.ToList())
                 {
-                    Lanes.Remove(lane);
+                    if (lane.Items.Count == 0)
+                    {
+                        Lanes.Remove(lane);
+                    }
                 }
-            }
 
-            foreach (var lane in Lanes)
+                foreach (var lane in Lanes)
+                {
+                    lane.LaneNumber = Lanes.IndexOf(lane);
+                }
+
+                RaisePropertyChanged("Lanes");
+                _recalculatingLanes = false;
+            }
+            else
             {
-                lane.LaneNumber = Lanes.IndexOf(lane);
+                Application.Current.MainWindow.Dispatcher.Invoke(RecalculateLanes);
             }
-
-            RaisePropertyChanged("Lanes");
-            _recalculatingLanes = false;
         }
 
         private void CalculateLanes()

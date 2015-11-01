@@ -1,5 +1,5 @@
 ﻿// <copyright file="WorkItemsSectionView.xaml.cs" company="Microsoft Corporation">Copyright Microsoft Corporation. All Rights Reserved. This code released under the terms of the Microsoft Public License (MS-PL, http://opensource.org/licenses/ms-pl.html.) This is sample code only, do not use in production environments.</copyright>
-namespace Microsoft.ALMRangers.Samples.MyHistory
+namespace Timekeeper.VsExtension
 {
     using System.Windows;
     using System.Windows.Input;
@@ -11,8 +11,9 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
     using System.Collections.Generic;
     using System.Linq;
     using System.Windows.Controls;
-    using Company.Timekeeper;
+    using Timekeeper.VsExtension;
     using Timekeeper.Timeline;
+    using Timekeeper.Entities;
 
     /// <summary>
     /// WorkItemsSectionView
@@ -78,7 +79,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
         {
             if (this.workItemList.SelectedItems.Count == 1)
             {
-                TimeRecord wi = this.workItemList.SelectedItems[0] as TimeRecord;
+                WorkItemTimeRecord wi = this.workItemList.SelectedItems[0] as WorkItemTimeRecord;
                 if (wi != null)
                 {
                     this.ParentSection.ViewWorkItemDetails(wi.Item.Id);
@@ -92,19 +93,19 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
 
             if (e.Source == ExportMenu)
             {
-                ParentSection.Export(records);
+                ParentSection.Export(records.Cast<WorkItemTimeRecord>().ToList());
             }
             else if (e.Source == IgnoreMenu)
             {
-                ParentSection.Ignore(records);
+                ParentSection.Ignore(records.Cast<WorkItemTimeRecord>().ToList());
             }
             else if (e.Source == MungeMenu)
             {
-                ParentSection.Munge(records);
+                ParentSection.Munge(records.Cast<WorkItemTimeRecord>().ToList());
             }
             else if (e.Source == CropMenu)
             {
-                ParentSection.Crop(records, CropStart.Value.Value.TimeOfDay, CropEnd.Value.Value.TimeOfDay);
+                ParentSection.Crop(records.Cast<WorkItemTimeRecord>().ToList(), CropStart.Value.Value.TimeOfDay, CropEnd.Value.Value.TimeOfDay);
             }
         }
 
@@ -125,17 +126,17 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
                 {
                     IgnoreMenu.IsEnabled = true;
                 }
-                if (records.All(x => records.First().Item == x.Item))
+                if (records.Count > 1 && records.All(x => records.First() is WorkItemTimeRecord && x is WorkItemTimeRecord && (records.First() as WorkItemTimeRecord).Item == (x as WorkItemTimeRecord).Item))
                 {
                     MungeMenu.IsEnabled = true;
                 }
             }
         }
 
-        private List<TimeRecord> GetSelectedTimeRecords()
+        private List<TimeRecordBase> GetSelectedTimeRecords()
         {
             var indices = GetSelectedIndices();
-            return new List<TimeRecord>(ParentSection.TimeRecords.Where(x => indices.Contains(ParentSection.TimeRecords.IndexOf(x))));
+            return new List<TimeRecordBase>(ParentSection.TimeRecords.Where(x => indices.Contains(ParentSection.TimeRecords.IndexOf(x))));
         }
 
         private List<int> GetSelectedIndices()
@@ -213,7 +214,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
 
         private void ViewTimeline_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            var tl = new MainWindow(ParentSection.TimeRecords);
+            var tl = new TimesheetWindow(ParentSection.TimeRecords);
             tl.Show();
         }
     }

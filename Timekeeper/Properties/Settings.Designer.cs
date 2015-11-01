@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Company.Timekeeper.Properties {
+namespace Timekeeper.VsExtension.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -23,21 +23,18 @@ namespace Company.Timekeeper.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Setting {
-            get {
-                return ((string)(this["Setting"]));
-            }
-        }
-        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"
-                    <ProjectStateNamesCollection xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+                    <ProjectSettingsCollection xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
                         <DefaultActiveState>Active</DefaultActiveState>
                         <DefaultPausedState>New</DefaultPausedState>
+                        <CrmConnectionString>Server=https://xrm.felinesoft.com; Username=felinesoft\Dan.Mann;Password=Wangimg1223Apr</CrmConnectionString>
+                        <Whitelist>true</Whitelist>
+                        <WhitelistedProjects>
+                            <string>Consol</string>
+                            <string>Dan M Test Thing</string>
+                        </WhitelistedProjects>
                         <Projects>
                             <ProjectStateNames>
                                 <ProjectName>Consol</ProjectName>
@@ -50,14 +47,14 @@ namespace Company.Timekeeper.Properties {
                                 <PausedState>Paused</PausedState>
                             </ProjectStateNames>
                         </Projects>
-                    </ProjectStateNamesCollection>
+                    </ProjectSettingsCollection>
                 ")]
-        public global::Timekeeper.SettingsTypes.ProjectStateNamesCollection StateNameConfiguration {
+        public global::Timekeeper.SettingsTypes.ProjectSettingsCollection SettingsCollection {
             get {
-                return ((global::Timekeeper.SettingsTypes.ProjectStateNamesCollection)(this["StateNameConfiguration"]));
+                return ((global::Timekeeper.SettingsTypes.ProjectSettingsCollection)(this["SettingsCollection"]));
             }
             set {
-                this["StateNameConfiguration"] = value;
+                this["SettingsCollection"] = value;
             }
         }
     }

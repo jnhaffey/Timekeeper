@@ -1,9 +1,9 @@
-using Microsoft.ALMRangers.Samples.MyHistory;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using Timekeeper.Entities;
 
 namespace Timekeeper.Timeline
 {
@@ -11,13 +11,13 @@ namespace Timekeeper.Timeline
     {
         private ObservableCollection<TimelineModel> _days = new ObservableCollection<TimelineModel>();
 
-        public TimesheetModel(IEnumerable<TimeRecord> records)
+        public TimesheetModel(IEnumerable<TimeRecordBase> records)
         {
             _days.CollectionChanged += _days_CollectionChanged;
             SetRecordsInternal(records);
         }
 
-        private void SetRecordsInternal(IEnumerable<TimeRecord> records)
+        private void SetRecordsInternal(IEnumerable<TimeRecordBase> records)
         {
             foreach (var val in Enum.GetValues(typeof(DayOfWeek)))
             {
@@ -30,7 +30,7 @@ namespace Timekeeper.Timeline
             }
         }
 
-        public IEnumerable<TimeRecord> Records
+        public IEnumerable<TimeRecordBase> Records
         {
             get
             {

@@ -1,5 +1,4 @@
-﻿using Microsoft.ALMRangers.Samples.MyHistory;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Timekeeper.Entities;
 
 namespace Timekeeper.Timeline
 {
@@ -41,11 +41,11 @@ namespace Timekeeper.Timeline
             InitializeComponent();
         }
 
-        public TimeRecord Model
+        public WorkItemTimeRecord Model
         {
             get
             {
-                return (TimeRecord)DataContext;
+                return (WorkItemTimeRecord)DataContext;
             }
             set
             {
@@ -59,7 +59,7 @@ namespace Timekeeper.Timeline
         {
             try
             {
-                var pos = e.GetPosition(App.Current.MainWindow);
+                var pos = e.GetPosition(Application.Current.MainWindow);
                 if (_holdingStart)
                 {
                     var delta = (pos.X - _origin) / _tickSize;
@@ -109,7 +109,7 @@ namespace Timekeeper.Timeline
                 _holdingStart = true;
                 _tickSize = this.ActualWidth / Model.Duration.TotalMinutes;
                 _originalMinutes = Model.StartTime.TimeOfDay.TotalMinutes;
-                _origin = e.GetPosition(App.Current.MainWindow).X;
+                _origin = e.GetPosition(Application.Current.MainWindow).X;
                 Mouse.Capture(this);
             }
             else if (pos.X > this.ActualWidth - (_tickSize * 2))
@@ -117,7 +117,7 @@ namespace Timekeeper.Timeline
                 _holdingEnd = true;
                 _tickSize = this.ActualWidth / Model.Duration.TotalMinutes;
                 _originalMinutes = Model.EndTime.TimeOfDay.TotalMinutes;
-                _origin = e.GetPosition(App.Current.MainWindow).X;
+                _origin = e.GetPosition(Application.Current.MainWindow).X;
                 Mouse.Capture(this);
             }
         }

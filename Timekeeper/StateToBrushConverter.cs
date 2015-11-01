@@ -1,11 +1,11 @@
-using Company.Timekeeper.Properties;
+using Timekeeper.VsExtension.Properties;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace Microsoft.ALMRangers.Samples.MyHistory
+namespace Timekeeper.VsExtension
 {
     public class StateToBrushConverter : IValueConverter
     {
@@ -14,7 +14,7 @@ namespace Microsoft.ALMRangers.Samples.MyHistory
         {
             if (value is WorkItem)
             {
-                if ((value as WorkItem).State == Settings.Default.StateNameConfiguration.GetActiveState((value as WorkItem).Project.Name))
+                if ((value as WorkItem).State == Properties.Settings.Default.SettingsCollection.GetActiveState((value as WorkItem).Project.Name))
                 {
                     return new SolidColorBrush(Colors.DarkGreen);
                 }

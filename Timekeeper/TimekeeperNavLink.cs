@@ -2,9 +2,9 @@
 using System.ComponentModel.Composition;
 using Microsoft.TeamFoundation.Controls;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.ALMRangers.Samples.MyHistory;
+using Timekeeper.VsExtension;
 
-namespace Company.Timekeeper
+namespace Timekeeper.VsExtension
 {
     [TeamExplorerNavigationLink(TimekeeperNavigationLink.LinkId, TeamExplorerNavigationItemIds.MyWork, 200)]
     public class TimekeeperNavigationLink : TeamExplorerBaseNavigationLink
