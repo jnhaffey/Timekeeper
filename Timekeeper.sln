@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timekeeper.VsExtension", "Timekeeper\Timekeeper.VsExtension.csproj", "{B996341B-2997-436C-85B9-2CD9A878ED52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timekeeper.VsExtension", "Timekeeper.VsExtension\Timekeeper.VsExtension.csproj", "{B996341B-2997-436C-85B9-2CD9A878ED52}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timekeeper.SettingsTypes", "Timekeeper.SettingsTypes\Timekeeper.SettingsTypes.csproj", "{43B7CEC4-76F7-43E3-BA81-76CFFC95C3F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timekeeper.Console", "ConsoleApplication1\Timekeeper.Console.csproj", "{1BFB5B20-C43A-434E-A675-E009BBD65F67}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timekeeper.Console", "Timekeeper.Console\Timekeeper.Console.csproj", "{1BFB5B20-C43A-434E-A675-E009BBD65F67}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Timekeeper.Timeline", "Timekeeper.Timeline\Timekeeper.Timeline.csproj", "{BBA07855-ACAC-48DC-924E-F60CDC12C558}"
 EndProject

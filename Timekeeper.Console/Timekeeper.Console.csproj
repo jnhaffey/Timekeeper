@@ -67,7 +67,7 @@
       <Project>{bba07855-acac-48dc-924e-f60cdc12c558}</Project>
       <Name>Timekeeper.Timeline</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Timekeeper\Timekeeper.VsExtension.csproj">
+    <ProjectReference Include="..\Timekeeper.VsExtension\Timekeeper.VsExtension.csproj">
       <Project>{b996341b-2997-436c-85b9-2cd9a878ed52}</Project>
       <Name>Timekeeper.VsExtension</Name>
     </ProjectReference>
