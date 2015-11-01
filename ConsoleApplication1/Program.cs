@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Timekeeper.Crm;
 
 namespace ConsoleApplication1
 {
@@ -32,6 +33,7 @@ namespace ConsoleApplication1
             //};
             //var ts = t.SplitToRecordPerDay();
             //ts.ForEach(x => x.Crop(new TimeSpan(9,0,0), new TimeSpan(18,0,0)));
+            new TimeRecordSync(null);
         }
     }
 }
